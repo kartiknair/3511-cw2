@@ -1,12 +1,17 @@
 package endpoints;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -63,11 +68,13 @@ class LobbyTask {
     
     public int numRounds;
     public List<Integer> score;
-    public String roundPrompt;
     
     public String latestWhiteImageData;
     public String latestBlackImageData;
     
+    public String roundPrompt;    
+    public ArrayList<String> prevPrompts = new ArrayList();
+    public ArrayList<String> allPrompts = new ArrayList();
     public ArrayList<String> whiteGuesses = new ArrayList();
     public ArrayList<String> blackGuesses = new ArrayList();
     
@@ -77,13 +84,42 @@ class LobbyTask {
         
         this.players = new HashMap();
         this.score = Arrays.asList(0, 0);
+        
+        InputStream is = getClass().getResourceAsStream("/resources/prompt-list.txt");
+        Scanner scanner = new Scanner(is);
+        while (scanner.hasNextLine()) {
+            String prompt = scanner.nextLine();
+            allPrompts.add(prompt);
+        }
+        scanner.close();
     }
     
-    private static String getRandomPrompt() {
-        return "foo";
+    private String getRandomPrompt() {
+        Random rand = new Random(System.currentTimeMillis());
+
+        System.out.println("get random prompt called!");
+
+        if (prevPrompts.isEmpty()) {
+            String randomPrompt = allPrompts.get(rand.nextInt(allPrompts.size()));
+            prevPrompts.add(randomPrompt);
+            return randomPrompt;
+        }
+        
+        String randomPrompt = allPrompts.get(rand.nextInt(allPrompts.size()));
+        // meaning until the previous prompts doesn't include our prompt
+        while (prevPrompts.indexOf(randomPrompt) != -1) {
+            System.out.println("looping");
+            randomPrompt = allPrompts.get(rand.nextInt(allPrompts.size()));
+            // technically this could loop an unnecessary amount of times depending on how unlucky we get with random
+        }
+        
+        prevPrompts.add(randomPrompt);
+        
+        return randomPrompt;
     }
     
     public void startRound() throws IOException {
+        System.out.println("start round called!");
         Collection<Player> playerValues = players.values();
         Collection<Player> whitePlayers = playerValues
                 .stream()
@@ -107,9 +143,12 @@ class LobbyTask {
 
         System.out.println(whiteArtist.id);
         System.out.println(blackArtist.id);
-
+        
+        roundPrompt = getRandomPrompt();
+        
         // We can start the round
         for (Player player : playerValues) {
+            System.out.println(player.toString());
             player.session.getBasicRemote().sendText(String.format(
                     "{\"kind\": \"assign-artist\", \"playerId\": \"%s\"}",
                     whiteArtist.id
@@ -118,7 +157,6 @@ class LobbyTask {
                     "{\"kind\": \"assign-artist\", \"playerId\": \"%s\"}",
                     blackArtist.id
             ));
-            roundPrompt = getRandomPrompt();
             player.session.getBasicRemote().sendText(String.format(
                     "{\"kind\": \"round-start\", \"prompt\": \"%s\"}", roundPrompt
             ));
