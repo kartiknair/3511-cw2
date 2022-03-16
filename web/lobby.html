@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lobby</title>
+  </head>
+  <body>
+    <div id="lobby-waiting" class="page">
+      <p id="lobby-code"></p>
+
+      <button id="join-white-btn">Join White</button>
+      <ul id="white-team-members"></ul>
+
+      <button id="join-black-btn">Join Black</button>
+      <ul id="black-team-members"></ul>
+
+      <button id="ready-btn">Ready</button>
+      <p id="ready-status"></p>
+    </div>
+
+    <div id="lobby-round-artist" class="page">
+      <p>You&apos;re drawing: <span id="artist-word"></span></p>
+      <div id="sketch" style="width: 25rem; height: 20rem">
+        <canvas id="paint"></canvas>
+      </div>
+    </div>
+
+    <div id="lobby-round-guesser" class="page">
+      <img id="preview-img" style="width: 25rem; height: 20rem" />
+
+      <p>Previous Guesses</p>
+      <ul id="prev-guesses"></ul>
+
+      <form id="guess-form">
+        <input type="text" id="guess-input" name="guess-input" />
+        <button type="submit">Guess</button>
+      </form>
+    </div>
+
+    <div id="round-end" class="page">
+      <p id="score"></p>
+
+      <div>
+        <img id="preview-img-white" style="width: 25rem; height: 20rem" />
+        <ul id="white-round-guesses"></ul>
+      </div>
+
+      <div>
+        <img id="preview-img-black" style="width: 25rem; height: 20rem" />
+        <ul id="black-round-guesses"></ul>
+      </div>
+    </div>
+
+    <script src="./resources/pages.js"></script>
+    <script src="./resources/lobby.js"></script>
+  </body>
+</html>

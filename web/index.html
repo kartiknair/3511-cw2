@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+  </head>
+  <body>
+    <div id="home-page" class="page">
+      <h1>Drawing Game</h1>
+      <button id="join-lobby-btn">Join Lobby</button>
+      <button id="create-lobby-btn">Create Lobby</button>
+    </div>
+
+    <div id="join-page" class="page">
+      <form id="join-form">
+        <label for="name">Your Name</label>
+        <input type="text" name="name" id="name" required />
+        <label for="lobby-code">Lobby Code</label>
+        <input type="text" name="lobby-code" id="lobby-code" required />
+        <button type="submit">Join</button>
+      </form>
+    </div>
+
+    <div id="create-page" class="page">
+      <form id="create-form">
+        <label for="creator-name">Your Name</label>
+        <input type="text" name="creator-name" id="creator-name" required />
+        <label for="num-rounds">Number of Rounds</label>
+        <input
+          type="number"
+          name="num-rounds"
+          id="num-rounds"
+          min="3"
+          required
+        />
+        <button type="submit">Create</button>
+      </form>
+    </div>
+
+    <div id="lobby-waiting" class="page">
+      <p id="lobby-code-display"></p>
+
+      <button id="join-white-btn">Join White</button>
+      <ul id="white-team-members"></ul>
+
+      <button id="join-black-btn">Join Black</button>
+      <ul id="black-team-members"></ul>
+
+      <button id="ready-btn">Ready</button>
+      <p id="ready-status"></p>
+    </div>
+
+    <div id="lobby-round-artist" class="page">
+      <p>You&apos;re drawing: <span id="artist-prompt"></span></p>
+      <div id="sketch" style="width: 25rem; height: 20rem">
+        <canvas id="paint"></canvas>
+      </div>
+      <div id="controls">
+        <div id="stroke-pallete">
+          <button data-line-width="2" class="stroke-choose">Thin</button>
+          <button data-line-width="4" class="stroke-choose">Fat</button>
+          <button data-line-width="10" class="stroke-choose">Fatter</button>
+        </div>
+        <div id="color-pallete">
+          <button data-color="red" class="color-choose">Red</button>
+          <button data-color="blue" class="color-choose">Blue</button>
+          <button data-color="green" class="color-choose">Green</button>
+          <button data-color="black" class="color-choose">Black</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="lobby-round-guesser" class="page">
+      <img id="preview-img" style="width: 25rem; height: 20rem" />
+
+      <p>Previous Guesses</p>
+      <ul id="prev-guesses"></ul>
+
+      <form id="guess-form">
+        <input type="text" id="guess-input" name="guess-input" />
+        <button type="submit">Guess</button>
+      </form>
+    </div>
+
+    <div id="round-end" class="page">
+      <p id="score"></p>
+
+      <div>
+        <img id="preview-img-white" style="width: 25rem; height: 20rem" />
+        <ul id="white-round-guesses"></ul>
+      </div>
+
+      <div>
+        <img id="preview-img-black" style="width: 25rem; height: 20rem" />
+        <ul id="black-round-guesses"></ul>
+      </div>
+    </div>
+
+    <div id="game-end" class="page">
+      <p id="final-score"></p>
+      <p id="winner"></p>
+    </div>
+
+    <script src="./resources/pages.js"></script>
+    <script src="./resources/home.js"></script>
+  </body>
+</html>
