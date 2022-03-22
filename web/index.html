@@ -55,11 +55,17 @@
     <div id="lobby-waiting" class="page">
       <p id="lobby-code-display"></p>
 
-      <button id="join-white-btn">Join White</button>
-      <ul id="white-team-members"></ul>
+      <div class="teams">
+        <div class="team">
+          <button id="join-white-btn">Join White</button>
+          <ul id="white-team-members"></ul>
+        </div>
 
-      <button id="join-black-btn">Join Black</button>
-      <ul id="black-team-members"></ul>
+        <div class="team">
+          <button id="join-black-btn">Join Black</button>
+          <ul id="black-team-members"></ul>
+        </div>
+      </div>
 
       <button id="ready-btn">Ready</button>
       <p id="ready-status"></p>
@@ -67,8 +73,8 @@
 
     <div id="lobby-round-artist" class="page">
       <p>You&apos;re drawing: <span id="artist-prompt"></span></p>
-      <div id="sketch" style="width: 25rem; height: 20rem">
-        <canvas id="paint"></canvas>
+      <div id="sketch">
+        <canvas id="paint" width="400" height="320"></canvas>
       </div>
       <div id="controls">
         <div id="stroke-pallete">
@@ -86,10 +92,14 @@
     </div>
 
     <div id="lobby-round-guesser" class="page">
-      <img id="preview-img" style="width: 25rem; height: 20rem" />
+      <div class="image-guesses">
+        <img id="preview-img" style="width: 25rem; height: 20rem" />
 
-      <p>Previous Guesses</p>
-      <ul id="prev-guesses"></ul>
+        <div>
+          <p>Previous Guesses</p>
+          <ul id="prev-guesses"></ul>
+        </div>
+      </div>
 
       <form id="guess-form">
         <input type="text" id="guess-input" name="guess-input" />
@@ -98,22 +108,30 @@
     </div>
 
     <div id="round-end" class="page">
-      <p id="score"></p>
+      <p id="score">1 - 0</p>
 
-      <div>
-        <img id="preview-img-white" style="width: 25rem; height: 20rem" />
-        <ul id="white-round-guesses"></ul>
-      </div>
+      <div class="overview">
+        <div>
+          <img id="preview-img-white" style="width: 25rem; height: 20rem" />
+          <ul id="white-round-guesses">
+            <li>guess one</li>
+            <li>guess two</li>
+          </ul>
+        </div>
 
-      <div>
-        <img id="preview-img-black" style="width: 25rem; height: 20rem" />
-        <ul id="black-round-guesses"></ul>
+        <div>
+          <img id="preview-img-black" style="width: 25rem; height: 20rem" />
+          <ul id="black-round-guesses">
+            <li>guess one</li>
+            <li>guess two</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div id="game-end" class="page">
-      <p id="final-score"></p>
-      <p id="winner"></p>
+      <p id="final-score">2 - 0</p>
+      <p id="winner">White won!</p>
     </div>
 
     <script src="./resources/pages.js"></script>

@@ -3,7 +3,7 @@
 *::after {
   margin: 0;
   border: 0;
-  box-shadow: border-box;
+  box-sizing: border-box;
 }
 
 html,
@@ -35,6 +35,10 @@ button {
   color: #ffffff;
   padding: 0.5rem 1rem;
   border-radius: 0.35rem;
+}
+
+button:disabled {
+  background: #777777;
 }
 
 .input-label-combo {
@@ -74,7 +78,8 @@ input::placeholder {
 }
 
 .page,
-form {
+#create-page form,
+#join-page form {
   width: 100%;
   height: 100%;
 
@@ -83,7 +88,9 @@ form {
 
   justify-content: center;
   align-items: center;
+}
 
+#home-page h1 {
   text-align: center;
 }
 
@@ -113,4 +120,136 @@ form {
 #join-page input,
 #create-page input {
   margin: 1.5rem 0;
+}
+
+/* Lobby Waiting */
+#lobby-waiting {
+  width: 70%;
+  margin: auto;
+  margin-top: 5rem;
+}
+
+#lobby-code-display {
+  margin-bottom: 2.5rem;
+  color: #777777;
+}
+
+#lobby-code-display > span {
+  color: #000000;
+}
+
+#lobby-waiting ul,
+#lobby-round-guesser ul {
+  list-style: none;
+  padding: 2rem;
+  border: 1px solid #000000;
+  border-radius: 0.5rem;
+  width: 15rem;
+  min-height: 20rem;
+}
+
+#black-team-members,
+#lobby-round-guesser ul {
+  background: #000000;
+  color: #ffffff;
+}
+
+#lobby-waiting .teams {
+  display: flex;
+}
+
+#join-black-btn,
+#join-white-btn {
+  background: white;
+  padding: 0;
+  color: #777777;
+  padding-bottom: 1rem;
+  text-align: left;
+}
+
+#lobby-waiting .team {
+  margin-right: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+#lobby-waiting .team:first-child {
+  margin-right: auto;
+  margin-left: 2.5rem;
+}
+
+#ready-btn {
+  margin-top: 5rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Round (artist) */
+canvas {
+  border: 1px solid #777777;
+  border-radius: 0.5rem;
+  margin: 2.5rem 0;
+}
+
+#controls {
+  width: 400px; /* to match the canvas */
+}
+
+#stroke-pallete {
+  margin-bottom: 1rem;
+}
+
+/* Round (guesser) */
+.image-guesses {
+  display: flex;
+  align-items: center;
+}
+
+#lobby-round-guesser img {
+  border: 1px solid #777777;
+  border-radius: 0.5rem;
+  margin: 5rem 2.5rem 2.5rem 0;
+}
+
+#lobby-round-guesser p {
+  margin-bottom: 1rem;
+  color: #777777;
+}
+
+/* #lobby-round-guesser ul {
+  min-height: 10rem;
+} */
+
+#guess-form {
+  margin-top: 2.5rem;
+  display: flex;
+}
+
+#guess-form button {
+  margin-left: 1rem;
+}
+
+/* Round End */
+#round-end img {
+  border: 1px solid #777777;
+  border-radius: 0.5rem;
+  margin: 5rem 0 2.5rem 0;
+}
+
+#round-end .overview {
+  display: flex;
+}
+
+#round-end .overview > div {
+  margin: 0 1.5rem;
+}
+
+/* Game End */
+#final-score {
+  font-size: 1.25rem;
+  color: #777777;
+}
+
+#winner {
+  margin-top: 1rem;
+  font-size: 2rem;
 }
