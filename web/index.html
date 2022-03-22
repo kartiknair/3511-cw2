@@ -4,37 +4,50 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./resources/style.css" />
     <title>Home</title>
   </head>
   <body>
     <div id="home-page" class="page">
       <h1>Drawing Game</h1>
-      <button id="join-lobby-btn">Join Lobby</button>
-      <button id="create-lobby-btn">Create Lobby</button>
+      <div class="button-group">
+        <button id="join-lobby-btn">Join Lobby</button>
+        <button id="create-lobby-btn">Create Lobby</button>
+      </div>
     </div>
 
     <div id="join-page" class="page">
       <form id="join-form">
-        <label for="name">Your Name</label>
-        <input type="text" name="name" id="name" required />
-        <label for="lobby-code">Lobby Code</label>
-        <input type="text" name="lobby-code" id="lobby-code" required />
+        <div class="input-label-combo">
+          <label for="name">Your Name</label>
+          <input type="text" name="name" id="name" required />
+        </div>
+
+        <div class="input-label-combo">
+          <label for="lobby-code">Lobby Code</label>
+          <input type="text" name="lobby-code" id="lobby-code" required />
+        </div>
+
         <button type="submit">Join</button>
       </form>
     </div>
 
     <div id="create-page" class="page">
       <form id="create-form">
-        <label for="creator-name">Your Name</label>
-        <input type="text" name="creator-name" id="creator-name" required />
-        <label for="num-rounds">Number of Rounds</label>
-        <input
-          type="number"
-          name="num-rounds"
-          id="num-rounds"
-          min="3"
-          required
-        />
+        <div class="input-label-combo">
+          <label for="creator-name">Your Name</label>
+          <input type="text" name="creator-name" id="creator-name" required />
+        </div>
+        <div class="input-label-combo">
+          <label for="num-rounds">Number of Rounds</label>
+          <input
+            type="number"
+            name="num-rounds"
+            id="num-rounds"
+            min="3"
+            required
+          />
+        </div>
         <button type="submit">Create</button>
       </form>
     </div>
