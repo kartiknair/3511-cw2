@@ -294,7 +294,7 @@ class LobbyTask {
                     if (score.get(0) == (int)((numRounds/2)+1) || score.get(1) == (int)((numRounds/2)+1)) {
                         for (Player player : players.values()) {
                             player.session.getBasicRemote().sendText(String.format(
-                                    "{\"kind\": \"game-end\", \"score\": [%d, %d]} \"winner\": \"%s\"",
+                                    "{\"kind\": \"game-end\", \"score\": [%d, %d]} \"winner\": \"%s\"}",
                                     score.get(0), score.get(1), score.get(0) > score.get(1) ? "white" : "black"
                             ));
                             
@@ -331,12 +331,17 @@ public class Lobby {
     }
     
     @OnClose
-    public void onClose(@PathParam("lobbyId") String lobbyId, Session session) {
+    public void onClose(@PathParam("lobbyId") String lobbyId, Session session) throws IOException {
         LobbyTask lobby = lobbies.get(lobbyId);
         for (Player player : lobby.players.values()) {
             if (player.session.equals(session)) {
                 System.out.println("Removing player: " + player.id);
                 lobby.players.remove(player.id);
+                    for (Player nestedPlayer : lobby.players.values()) {
+                        nestedPlayer.session.getBasicRemote().sendText(
+                            String.format("{\"kind\": \"player-leave\", \"playerId\": \"%s\"}", player.id)
+                        );
+                    }
                 break;
             }
         }

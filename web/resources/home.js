@@ -161,12 +161,18 @@ window.addEventListener("load-lobby-waiting", () => {
   ws.addEventListener("message", (e) => {
     console.log(e.data);
     let msg = JSON.parse(e.data);
+    console.log(msg);
 
     if (msg.kind === "player-join") {
       playerNames[msg.playerId] = msg.name;
       readyStatusEl.textContent = `${numPlayersReady}/${
         Object.keys(playerNames).length
       }`;
+    } else if (msg.kind === "player-leave") {
+      console.log("player left!!!!!!!!", msg.playerId);
+      whiteMembers = whiteMembers.filter((mem) => mem !== msg.playerId);
+      blackMembers = blackMembers.filter((mem) => mem !== msg.playerId);
+      updateTeamMemberLists();
     } else if (msg.kind === "choose-team") {
       if (msg.team === "white") {
         if (!whiteMembers.includes(msg.playerId))
