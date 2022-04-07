@@ -209,15 +209,19 @@ class LobbyTask {
                 
                 Collection<Player> playerValues = players.values();
                 
-                boolean allPlayersReady = true;
+                int whitePlayersReady = 0;
+                int blackPlayersReady = 0;
                 for (Player player : playerValues) {
                     if (!player.ready) {
-                        allPlayersReady = false;
+                        if (player.team == Team.WHITE)
+                            whitePlayersReady++;
+                        else
+                            blackPlayersReady++;
                         break;
                     }
                 }
                 
-                if (allPlayersReady && playerValues.size() >= 4) {
+                if (whitePlayersReady >= 2 && blackPlayersReady >= 2) {
                     startRound();
                 }
             } else if (messageKind.equals("draw")) {
