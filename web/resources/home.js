@@ -208,6 +208,9 @@ window.addEventListener("load-lobby-waiting", () => {
         switchPage("lobby-round-guesser");
       }
     } else if (msg.kind === "round-end") {
+      whiteGuessListEl.innerHTML = "";
+      blackGuessListEl.innerHTML = "";
+
       scoreEl.textContent = `${msg.currentScore[0]} - ${msg.currentScore[1]}`;
       whiteImgEl.setAttribute("src", msg.whiteData);
       blackImgEl.setAttribute("src", msg.blackData);
@@ -249,11 +252,6 @@ window.addEventListener("load-lobby-round-artist", () => {
   const ctx = canvas.getContext("2d");
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const sketch = document.querySelector("#sketch");
-  const sketchStyle = getComputedStyle(sketch);
-  canvas.width = parseInt(sketchStyle.getPropertyValue("width"));
-  canvas.height = parseInt(sketchStyle.getPropertyValue("height"));
 
   let mouse = { x: 0, y: 0 };
   let lastMouse = { x: 0, y: 0 };
