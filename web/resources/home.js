@@ -8,6 +8,10 @@ let whiteMembers = [];
 let blackMembers = [];
 let teamArtistId = null;
 
+/*
+ * This function generates universally unique identifier.
+ * Implementation taken from : https://stackoverflow.com/a/2117523/12785202
+ */
 function uuidv4() {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
     (
@@ -41,6 +45,8 @@ window.addEventListener("load-create-page", () => {
     lobbyId = uuidv4();
     selfId = uuidv4();
     const playerName = creatorNameInput.value;
+    
+    // This is the websockets URL generated from current URL
     const wsUri = `ws://${document.location.host}${document.location.pathname}sockets/lobby/${lobbyId}?rounds=${numRoundsInput.value}`;
 
     ws = new WebSocket(wsUri);
@@ -76,6 +82,7 @@ window.addEventListener("load-join-page", () => {
     const wsUri = `ws://${document.location.host}${document.location.pathname}sockets/lobby/${lobbyId}`;
     ws = new WebSocket(wsUri);
 
+    // As we open connection, join message is sent with players ID
     ws.addEventListener("open", () => {
       ws.send(JSON.stringify({ kind: "player-join", name, playerId: selfId }));
       playerNames[selfId] = name;
@@ -125,8 +132,9 @@ window.addEventListener("load-lobby-waiting", () => {
     readyBtn.setAttribute("disabled", true);
   });
 
+  // If user closes the page, we send a user leave message
   window.addEventListener("beforeunload", () => {
-    ws.send(JSON.stringify({ kind: "player-left", playerId: selfId }));
+    ws.send(JSON.stringify({ kind: "player-leave", playerId: selfId }));
   });
 
   const whiteMembersListEl = document.querySelector("#white-team-members");
@@ -157,6 +165,12 @@ window.addEventListener("load-lobby-waiting", () => {
 
   const finalScoreEl = document.querySelector("#final-score");
   const winnerEl = document.querySelector("#winner");
+  
+  /*
+   * There are 2 main listeners that we attach to the ws one of them
+   * is right below. It handles all lobby waiting messages. The other
+   * listener handels all game state changes.
+   */
 
   ws.addEventListener("message", (e) => {
     console.log(e.data);
@@ -193,6 +207,11 @@ window.addEventListener("load-lobby-waiting", () => {
     } else if (msg.kind === "assign-artist") {
       console.log(msg);
 
+      /*
+       * We store a gloabl teamArtistId which holds the player's team's current round artist.
+       * We use this to only acknowledge draw messages from the user's team's artist, and know
+       * if the user is the current artist to switch to the artist page.
+       */ 
       if (
         (whiteMembers.includes(msg.playerId) &&
           whiteMembers.includes(selfId)) ||
