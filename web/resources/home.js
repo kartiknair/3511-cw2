@@ -45,7 +45,7 @@ window.addEventListener("load-create-page", () => {
     lobbyId = uuidv4();
     selfId = uuidv4();
     const playerName = creatorNameInput.value;
-    
+
     // This is the websockets URL generated from current URL
     const wsUri = `ws://${document.location.host}${document.location.pathname}sockets/lobby/${lobbyId}?rounds=${numRoundsInput.value}`;
 
@@ -153,7 +153,7 @@ window.addEventListener("load-lobby-waiting", () => {
     });
   }
 
-  let numPlayersReady = 0;
+  let readyPlayers = [];
   readyStatusEl.textContent = `0/${Object.keys(playerNames).length}`;
 
   // Round/Game End
@@ -165,7 +165,7 @@ window.addEventListener("load-lobby-waiting", () => {
 
   const finalScoreEl = document.querySelector("#final-score");
   const winnerEl = document.querySelector("#winner");
-  
+
   /*
    * There are 2 main listeners that we attach to the ws one of them
    * is right below. It handles all lobby waiting messages. The other
@@ -179,14 +179,22 @@ window.addEventListener("load-lobby-waiting", () => {
 
     if (msg.kind === "player-join") {
       playerNames[msg.playerId] = msg.name;
-      readyStatusEl.textContent = `${numPlayersReady}/${
+      readyStatusEl.textContent = `${readyPlayers.length}/${
         Object.keys(playerNames).length
       }`;
     } else if (msg.kind === "player-leave") {
       console.log("player left!!!!!!!!", msg.playerId);
       whiteMembers = whiteMembers.filter((mem) => mem !== msg.playerId);
       blackMembers = blackMembers.filter((mem) => mem !== msg.playerId);
+      readyPlayers = readyPlayers.filter((mem) => mem !== msg.playerId);
+      delete playerNames[msg.playerId];
+
+      console.log(playerNames);
+
       updateTeamMemberLists();
+      readyStatusEl.textContent = `${readyPlayers.length}/${
+        Object.keys(playerNames).length
+      }`;
     } else if (msg.kind === "choose-team") {
       if (msg.team === "white") {
         if (!whiteMembers.includes(msg.playerId))
@@ -200,8 +208,8 @@ window.addEventListener("load-lobby-waiting", () => {
 
       updateTeamMemberLists();
     } else if (msg.kind === "player-ready") {
-      numPlayersReady += 1;
-      readyStatusEl.textContent = `${numPlayersReady}/${
+      readyPlayers.push(msg.playerId);
+      readyStatusEl.textContent = `${readyPlayers.length}/${
         Object.keys(playerNames).length
       }`;
     } else if (msg.kind === "assign-artist") {
@@ -211,7 +219,7 @@ window.addEventListener("load-lobby-waiting", () => {
        * We store a gloabl teamArtistId which holds the player's team's current round artist.
        * We use this to only acknowledge draw messages from the user's team's artist, and know
        * if the user is the current artist to switch to the artist page.
-       */ 
+       */
       if (
         (whiteMembers.includes(msg.playerId) &&
           whiteMembers.includes(selfId)) ||
@@ -250,7 +258,7 @@ window.addEventListener("load-lobby-waiting", () => {
 
       switchPage("game-end");
       setTimeout(() => {
-        switchPage("lobby-waiting");
+        window.location = window.location;
       }, 2000);
     }
   });

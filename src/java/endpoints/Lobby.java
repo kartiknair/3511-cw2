@@ -139,6 +139,10 @@ class LobbyTask {
     */
     public void startRound() throws IOException {
         System.out.println("start round called!");
+        
+        whiteGuesses.clear();
+        blackGuesses.clear();
+        
         Collection<Player> playerValues = players.values();
         Collection<Player> whitePlayers = playerValues
                 .stream()
@@ -287,7 +291,7 @@ class LobbyTask {
                     for (String whiteGuess : whiteGuesses) {
                         whiteGuessesAsJSON += String.format("\"%s\",", whiteGuess);
                     }
-                    for (String blackGuess : whiteGuesses) {
+                    for (String blackGuess : blackGuesses) {
                         blackGuessesAsJSON += String.format("\"%s\",", blackGuess);
                     }
                     
@@ -327,14 +331,14 @@ class LobbyTask {
                     if (score.get(0) == (int)((numRounds/2)+1) || score.get(1) == (int)((numRounds/2)+1)) {
                         for (Player player : players.values()) {
                             player.session.getBasicRemote().sendText(String.format(
-                                    "{\"kind\": \"game-end\", \"score\": [%d, %d]} \"winner\": \"%s\"}",
+                                    "{\"kind\": \"game-end\", \"score\": [%d, %d], \"winner\": \"%s\"}",
                                     score.get(0), score.get(1), score.get(0) > score.get(1) ? "white" : "black"
                             ));
-                            
-                            // Reset the scores so game can be restarted
-                            score.set(0, 0);
-                            score.set(1, 0);
                         }
+
+                        // Reset the scores so game can be restarted
+                        score.set(0, 0);
+                        score.set(1, 0);
                     } else {
                         startRound(); // Start a new round
                     }
