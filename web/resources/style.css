@@ -14,7 +14,7 @@ body {
 
 /*
  * Import the custom font used throughout the page
- */ 
+ */
 @font-face {
   font-family: undefined-medium;
   src: url("./undefined-medium.woff2");
@@ -35,7 +35,7 @@ h6 {
 
 /*
  * Buttons are black with a white font
- */ 
+ */
 button {
   background: #000000;
   color: #ffffff;
@@ -63,7 +63,7 @@ button:disabled {
 /*
  * For things like; round number, name, lobby code, etc.
  * It's white with a grey border and grey text.
- */ 
+ */
 input {
   background: #ffffff;
   padding: 0.5rem 1rem;
@@ -83,10 +83,6 @@ input::placeholder {
 }
 
 /* Home Page */
-#home-page h1 {
-  margin-top: 5rem;
-}
-
 .page,
 #create-page form,
 #join-page form {
@@ -171,7 +167,7 @@ input::placeholder {
 /*
  * We override the styles for the "Join Black" and "Join White"
  * to blend in with the background.
- */ 
+ */
 #join-black-btn,
 #join-white-btn {
   background: white;

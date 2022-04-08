@@ -237,15 +237,17 @@ class LobbyTask {
                 int whitePlayersReady = 0;
                 int blackPlayersReady = 0;
                 for (Player player : playerValues) {
-                    if (!player.ready) {
+                    if (player.ready) {
                         if (player.team == Team.WHITE)
                             whitePlayersReady++;
                         else
                             blackPlayersReady++;
-                        break;
                     }
                 }
                 
+                System.out.println(whitePlayersReady);
+                System.out.println(blackPlayersReady);
+                System.out.println(playerValues.size());
                 if (whitePlayersReady >= 2 && blackPlayersReady >= 2 && 
                         whitePlayersReady + blackPlayersReady == playerValues.size()) {
                     startRound();
