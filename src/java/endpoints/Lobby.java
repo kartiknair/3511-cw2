@@ -40,7 +40,12 @@ class Player {
     public boolean ready;
     public boolean artist;
 
+    /*
+     * The Player is a transparent struct as all members are publically accesible,
+     * and there is no data encapsulation.
+     */
     
+    // Player w/out a team (hasn't decided yet)
     public Player(String id, String name, Session session) {
         this.id = id;
         this.name = name;
@@ -51,6 +56,7 @@ class Player {
         this.artist = false;
     }
     
+    // Player w/ a team
     public Player(String id, String name, Session session, Team team) {
         this.id = id;
         this.name = name;
@@ -62,6 +68,10 @@ class Player {
     }
 }
 
+/*
+ * Holds all game state for a specific lobby. Also handles messages
+ * exchanged within this lobby.
+ */
 class LobbyTask {
     public String lobbyId;
     public HashMap<String, Player> players;
@@ -78,6 +88,7 @@ class LobbyTask {
     public ArrayList<String> whiteGuesses = new ArrayList();
     public ArrayList<String> blackGuesses = new ArrayList();
     
+    // Initializes everything
     public LobbyTask(String lobbyId, int numRounds) {
         this.lobbyId = lobbyId;
         this.numRounds = numRounds;
@@ -85,6 +96,7 @@ class LobbyTask {
         this.players = new HashMap();
         this.score = Arrays.asList(0, 0);
         
+        // Reads the prompt list (only does this once, when the lobby is created)
         InputStream is = getClass().getResourceAsStream("/resources/prompt-list.txt");
         Scanner scanner = new Scanner(is);
         while (scanner.hasNextLine()) {
@@ -94,6 +106,10 @@ class LobbyTask {
         scanner.close();
     }
     
+    /*
+     * Gets one of the prompts from the prompt list. 
+     * Ensures that the prompt hasn't come up in a previous round of a game.
+     */
     private String getRandomPrompt() {
         Random rand = new Random(System.currentTimeMillis());
 
@@ -106,18 +122,21 @@ class LobbyTask {
         }
         
         String randomPrompt = allPrompts.get(rand.nextInt(allPrompts.size()));
-        // meaning until the previous prompts doesn't include our prompt
+        // Meaning until the previous prompts doesn't include our prompt
         while (prevPrompts.indexOf(randomPrompt) != -1) {
             System.out.println("looping");
             randomPrompt = allPrompts.get(rand.nextInt(allPrompts.size()));
-            // technically this could loop an unnecessary amount of times depending on how unlucky we get with random
+            // Technically this could loop an unnecessary amount of times depending on how unlucky we get with random
         }
         
         prevPrompts.add(randomPrompt);
-        
         return randomPrompt;
     }
     
+    /*
+     * It chooses an artist for both teams, and chooses a random prompt.
+     * It then broadcasts the round-start message to all players in the lobby.
+    */
     public void startRound() throws IOException {
         System.out.println("start round called!");
         Collection<Player> playerValues = players.values();
@@ -163,6 +182,7 @@ class LobbyTask {
         }
     }
     
+    // Message callback. Whenever any player sends any message it goes to this callback.
     public void handleMessage(Session senderSession, String rawMessage) throws IOException {
         JSONParser parser = new JSONParser();
         
@@ -209,6 +229,11 @@ class LobbyTask {
                 
                 Collection<Player> playerValues = players.values();
                 
+                /*
+                 * We count the num of players ready on each team. So we can only
+                 * start the game when all players are ready and there's a min
+                 * of two players on each team.
+                 */
                 int whitePlayersReady = 0;
                 int blackPlayersReady = 0;
                 for (Player player : playerValues) {
@@ -221,13 +246,15 @@ class LobbyTask {
                     }
                 }
                 
-                if (whitePlayersReady >= 2 && blackPlayersReady >= 2) {
+                if (whitePlayersReady >= 2 && blackPlayersReady >= 2 && 
+                        whitePlayersReady + blackPlayersReady == playerValues.size()) {
                     startRound();
                 }
             } else if (messageKind.equals("draw")) {
                 String artistId = (String)message.get("playerId");
                 String imageData = (String)message.get("data");
                 Player artist = players.get(artistId);
+                // Cache the latest image data for each team to show at round end
                 if (artist.team == Team.WHITE) {
                     latestWhiteImageData = imageData;
                 } else {
@@ -307,7 +334,7 @@ class LobbyTask {
                             score.set(1, 0);
                         }
                     } else {
-                        startRound(); // start a new round
+                        startRound(); // Start a new round
                     }
                 }
             }
@@ -326,6 +353,7 @@ public class Lobby {
     public void onOpen(@PathParam("lobbyId") String lobbyId, Session creatorSession) {
         System.out.println(lobbyId);
         
+        // On connection open, if lobbyID doesn't exist, we create a lobby with that ID
         if (!lobbies.containsKey(lobbyId)) {
             String query = creatorSession.getQueryString();
             String numRoundsStr = query.substring("rounds=".length(), query.length());
@@ -350,11 +378,13 @@ public class Lobby {
             }
         }
         
+        // Once all players leave we delete all cached lobby data (ex images, guesses, etc.)
         if (lobby.players.isEmpty()) {
             lobbies.remove(lobbyId);
         }
     }
 
+    // Redirects all messages meant for a lobby to that task
     @OnMessage
     public void onMessage(@PathParam("lobbyId") String lobbyId, Session senderSession, String rawMessage)
             throws IOException {

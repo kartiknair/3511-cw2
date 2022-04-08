@@ -310,6 +310,7 @@ window.addEventListener("load-lobby-round-artist", () => {
   });
 
   function onPaint() {
+    // Serialize and send the image data as base64 encoded data URI
     ws.send(
       JSON.stringify({
         kind: "draw",
@@ -372,7 +373,7 @@ window.addEventListener("load-lobby-round-guesser", () => {
 
     if (msg.kind === "draw") {
       console.log(teamArtistId);
-      // if this draw message is from our team
+      // If this draw message is from our team we display it in the image
       if (msg.playerId === teamArtistId) {
         imgEl.setAttribute("src", msg.data);
       }

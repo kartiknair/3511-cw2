@@ -12,6 +12,9 @@ body {
   height: 100%;
 }
 
+/*
+ * Import the custom font used throughout the page
+ */ 
 @font-face {
   font-family: undefined-medium;
   src: url("./undefined-medium.woff2");
@@ -30,6 +33,9 @@ h6 {
   font-weight: normal;
 }
 
+/*
+ * Buttons are black with a white font
+ */ 
 button {
   background: #000000;
   color: #ffffff;
@@ -54,6 +60,10 @@ button:disabled {
   display: block;
 }
 
+/*
+ * For things like; round number, name, lobby code, etc.
+ * It's white with a grey border and grey text.
+ */ 
 input {
   background: #ffffff;
   padding: 0.5rem 1rem;
@@ -158,6 +168,10 @@ input::placeholder {
   display: flex;
 }
 
+/*
+ * We override the styles for the "Join Black" and "Join White"
+ * to blend in with the background.
+ */ 
 #join-black-btn,
 #join-white-btn {
   background: white;
@@ -191,7 +205,7 @@ canvas {
 }
 
 #controls {
-  width: 400px; /* to match the canvas */
+  width: 400px; /* To match the canvas */
 }
 
 #stroke-pallete {
@@ -214,10 +228,6 @@ canvas {
   margin-bottom: 1rem;
   color: #777777;
 }
-
-/* #lobby-round-guesser ul {
-  min-height: 10rem;
-} */
 
 #guess-form {
   margin-top: 2.5rem;
